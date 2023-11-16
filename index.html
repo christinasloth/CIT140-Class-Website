@@ -24,11 +24,12 @@
 	
 	<h3><b>We filter our dataset by major</b></h3>
 	<div id="majorTable"></div>
+	
 	</div>
 </body>
 
 <script type="text/x-handlebars-template" id="tableTemplate">
-	<table cellspacing='12'>
+	<table class="table table-striped">
 	<tr><th>Name</th><th>Major</th><th>Midterm</th><th>Final</th></tr>
 	{{#each rows}}
 		<tr>
@@ -39,20 +40,22 @@
 </script>
 
 <script>
-	window.onload = async function(){
-		var url = "cit5students.json";
-		var response = await fetch(url);
+	window.onload = async function getData(selected_major){
+		var response = await fetch('cit5students.json');
+		
 		if(response.ok){
 			var data = await response.json();
 			
+			cit5students=data.filter((student) => student.major == selected_major);
+			
 			var templateText = document.getElementById('tableTemplate').innerHTML;
 			var compiledTemplateText = Handlebars.compile(templateText);
-			compiledHtml = compiledTemplateText({ rows: data})
+			compiledHtml = compiledTemplateText({ rows: cit5students })
 			document.getElementById('majorTable').innerHTML = compiledHtml;
 		}
 		
-		else {
-			document.querySelector('#majorTable').innerHTML = "Date Not Found";
+		else{
+			document.querySelector().innerHTML = "There was an error, or student not found";
 		}
 	}
 </script>
